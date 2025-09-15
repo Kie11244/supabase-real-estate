@@ -1,0 +1,5 @@
+{
+  "name": "Supabase Real Estate",
+  "description": "A comprehensive real estate listing platform powered by React and Supabase, allowing users to browse properties and manage listings.",
+  "requestFramePermissions": []
+}
