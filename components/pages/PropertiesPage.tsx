@@ -76,53 +76,87 @@ const PropertiesPage: React.FC = () => {
   }, [fetchProperties]);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">All Properties</h1>
-      
+    <div className="container mx-auto space-y-10 px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-3xl text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.35em] text-blue-500">Curated collection</p>
+        <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">สำรวจรายการทรัพย์ทั้งหมด</h1>
+        <p className="mt-4 text-base text-slate-600">
+          ปรับแต่งการค้นหาเพื่อหาบ้านและคอนโดที่ตรงใจ พร้อมเรียงลำดับตามงบประมาณหรือความใหม่ของประกาศได้ทันที
+        </p>
+      </div>
+
       {/* Filter Bar */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-8 flex flex-col sm:flex-row gap-4 items-center">
-        <div className="flex-1 w-full sm:w-auto">
-          <label htmlFor="typeFilter" className="block text-sm font-medium text-gray-700">Type</label>
-          <select id="typeFilter" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value as any)} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-            <option value="all">All</option>
-            <option value="rent">Rent</option>
-            <option value="buy">Buy</option>
-          </select>
-        </div>
-        <div className="flex-1 w-full sm:w-auto">
-          <label htmlFor="bedroomFilter" className="block text-sm font-medium text-gray-700">Bedrooms</label>
-          <select id="bedroomFilter" value={bedroomFilter} onChange={(e) => setBedroomFilter(e.target.value as any)} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-            <option value="all">Any</option>
-            <option value="0">Studio</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3+">3+</option>
-          </select>
-        </div>
-        <div className="flex-1 w-full sm:w-auto">
-          <label htmlFor="sortBy" className="block text-sm font-medium text-gray-700">Sort By</label>
-          <select id="sortBy" value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-            <option value="created_at_desc">Newest</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-          </select>
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur">
+        <div className="absolute -right-24 -top-24 h-48 w-48 rounded-full bg-gradient-to-br from-blue-100 via-indigo-100 to-transparent opacity-60" aria-hidden />
+        <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-col">
+            <label htmlFor="typeFilter" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+              ประเภทประกาศ
+            </label>
+            <select
+              id="typeFilter"
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value as any)}
+              className="mt-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+              <option value="all">ทั้งหมด</option>
+              <option value="rent">เช่า</option>
+              <option value="buy">ขาย</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="bedroomFilter" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+              จำนวนห้องนอน
+            </label>
+            <select
+              id="bedroomFilter"
+              value={bedroomFilter}
+              onChange={(e) => setBedroomFilter(e.target.value as any)}
+              className="mt-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+              <option value="all">ทั้งหมด</option>
+              <option value="0">สตูดิโอ</option>
+              <option value="1">1 ห้อง</option>
+              <option value="2">2 ห้อง</option>
+              <option value="3+">3 ห้องขึ้นไป</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="sortBy" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+              เรียงลำดับตาม
+            </label>
+            <select
+              id="sortBy"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="mt-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+              <option value="created_at_desc">ประกาศล่าสุด</option>
+              <option value="price_asc">ราคาต่ำไปสูง</option>
+              <option value="price_desc">ราคาสูงไปต่ำ</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {loading ? (
         <Spinner />
       ) : error ? (
-        <div className="text-center text-red-500">{error}</div>
+        <div className="rounded-3xl border border-red-200 bg-red-50/90 px-6 py-12 text-center text-red-600 shadow-lg shadow-red-100">
+          {error}
+        </div>
       ) : properties.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {properties.map((property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-500 py-16">
-          <h2 className="text-2xl font-semibold">No Properties Found</h2>
-          <p className="mt-2">Try adjusting your filters to find what you're looking for.</p>
+        <div className="rounded-3xl border border-slate-200/80 bg-white/90 py-20 text-center shadow-lg shadow-slate-200/60">
+          <h2 className="text-2xl font-semibold text-slate-900">ไม่พบรายการที่ต้องการ</h2>
+          <p className="mt-2 text-slate-600">ลองปรับตัวกรองเพื่อค้นหาอสังหาริมทรัพย์ที่เหมาะกับคุณมากขึ้น</p>
         </div>
       )}
     </div>

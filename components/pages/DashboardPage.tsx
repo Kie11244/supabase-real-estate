@@ -82,55 +82,78 @@ const DashboardPage: React.FC = () => {
   const formatter = new Intl.NumberFormat('th-TH');
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Manage Properties</h1>
-        <Link 
+    <div className="container mx-auto space-y-10 px-4 py-16 sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-6 rounded-3xl border border-slate-200/80 bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-purple-600/10 px-8 py-10 shadow-xl shadow-slate-200/60 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-blue-600">control center</p>
+          <h1 className="mt-3 text-3xl font-bold text-slate-900 sm:text-4xl">จัดการรายการทรัพย์ทั้งหมด</h1>
+          <p className="mt-2 text-sm text-slate-600">ตรวจสอบอัปเดตสถานะ เพิ่มหรือลบประกาศได้จากแดชบอร์ดเดียว</p>
+        </div>
+        <Link
           to="/add-property"
-          className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
+          className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-lg shadow-slate-900/30 transition hover:-translate-y-0.5 hover:bg-slate-800"
         >
-          + Add New Property
+          <span>+ เพิ่มทรัพย์ใหม่</span>
         </Link>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg overflow-x-auto">
+      <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 shadow-2xl shadow-slate-200/60">
         {loading ? (
           <Spinner />
         ) : error ? (
-          <div className="p-4 text-red-500">{error}</div>
-        ) : (
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th scope="col" className="relative px-6 py-3"><span className="sr-only">Actions</span></th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {properties.map((prop) => (
-                <tr key={prop.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{prop.title_th}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prop.projects?.name_th}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{prop.type}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatter.format(prop.price)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${prop.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                      {prop.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                    {/* Placeholder for Edit functionality */}
-                    <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
-                    <button onClick={() => handleDelete(prop.id)} className="text-red-600 hover:text-red-900">Delete</button>
-                  </td>
+          <div className="p-8 text-center text-red-600">{error}</div>
+        ) : properties.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200/80 text-sm">
+              <thead className="bg-slate-50/90 text-slate-500">
+                <tr>
+                  <th scope="col" className="px-6 py-4 text-left font-semibold uppercase tracking-[0.25em]">ชื่อประกาศ</th>
+                  <th scope="col" className="px-6 py-4 text-left font-semibold uppercase tracking-[0.25em]">โครงการ</th>
+                  <th scope="col" className="px-6 py-4 text-left font-semibold uppercase tracking-[0.25em]">ประเภท</th>
+                  <th scope="col" className="px-6 py-4 text-left font-semibold uppercase tracking-[0.25em]">ราคา</th>
+                  <th scope="col" className="px-6 py-4 text-left font-semibold uppercase tracking-[0.25em]">สถานะ</th>
+                  <th scope="col" className="px-6 py-4 text-right font-semibold uppercase tracking-[0.25em]">จัดการ</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-200/70 bg-white/70 text-slate-700">
+                {properties.map((prop) => (
+                  <tr key={prop.id} className="transition hover:bg-blue-50/50">
+                    <td className="px-6 py-4 font-semibold text-slate-900">{prop.title_th}</td>
+                    <td className="px-6 py-4 text-slate-500">{prop.projects?.name_th || '-'}</td>
+                    <td className="px-6 py-4 capitalize text-slate-500">{prop.type}</td>
+                    <td className="px-6 py-4 font-semibold text-slate-700">{formatter.format(prop.price)}</td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] ${
+                          prop.status === 'available'
+                            ? 'bg-emerald-100 text-emerald-700'
+                            : 'bg-rose-100 text-rose-700'
+                        }`}
+                      >
+                        <span className="h-2 w-2 rounded-full bg-current" />
+                        {prop.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="inline-flex items-center gap-3">
+                        <button className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600 transition hover:text-blue-800">
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(prop.id)}
+                          className="text-xs font-semibold uppercase tracking-[0.3em] text-rose-600 transition hover:text-rose-800"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="px-8 py-16 text-center text-slate-500">ยังไม่มีรายการทรัพย์ ให้เริ่มต้นเพิ่มทรัพย์ชิ้นแรกของคุณได้เลย</div>
         )}
       </div>
     </div>
