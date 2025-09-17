@@ -39,9 +39,9 @@ const PropertyDetailPage: React.FC = () => {
       } catch (err: any) {
         let errorMessage = 'An unexpected error occurred while fetching property details.';
         if (typeof err === 'string') {
-            errorMessage = err;
+          errorMessage = err;
         } else if (err && typeof err === 'object' && 'message' in err) {
-            errorMessage = String(err.message);
+          errorMessage = String(err.message);
         }
         setError(errorMessage);
         console.error('Error fetching property:', err);
@@ -60,80 +60,214 @@ const PropertyDetailPage: React.FC = () => {
   });
 
   if (loading) return <div className="min-h-[60vh] flex items-center justify-center"><Spinner /></div>;
-  if (error) return <div className="text-center text-red-500 py-16">Error: {error}</div>;
-  if (!property) return <div className="text-center text-gray-500 py-16">Property not found.</div>;
+  if (error) return <div className="rounded-3xl border border-red-200 bg-red-50/80 px-6 py-16 text-center text-red-600 shadow-lg shadow-red-100">Error: {error}</div>;
+  if (!property) return <div className="text-center text-slate-500 py-16">Property not found.</div>;
 
   const project = property.projects;
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-white rounded-lg shadow-xl overflow-hidden">
-        {/* Image Gallery */}
-        <div>
-          <div className="h-96 bg-gray-200">
-            {selectedImage && <img src={selectedImage} alt={property.title_th} className="w-full h-full object-cover"/>}
-          </div>
-          {property.images && property.images.length > 1 && (
-            <div className="flex space-x-2 p-2 bg-gray-100">
-              {property.images.map((img, index) => (
-                <button key={index} onClick={() => setSelectedImage(img)} className={`w-24 h-16 rounded-md overflow-hidden border-2 ${selectedImage === img ? 'border-blue-500' : 'border-transparent'}`}>
-                  <img src={img} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
+    <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl space-y-12">
+        <div className="grid gap-10 lg:grid-cols-[1.65fr,1fr]">
+          <div className="space-y-8">
+            <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-slate-200/70">
+              <div className="relative h-[420px] w-full">
+                {selectedImage && (
+                  <img
+                    src={selectedImage}
+                    alt={property.title_th}
+                    className="h-full w-full object-cover"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/10 to-transparent" aria-hidden />
+                <div className="absolute left-6 top-6 flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-slate-700 shadow-sm shadow-white/60">
+                    for {property.type}
+                  </span>
+                  {property.status && (
+                    <span className="inline-flex items-center rounded-full border border-white/70 bg-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/80">
+                      {property.status}
+                    </span>
+                  )}
+                </div>
+                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
+                      {project?.name_en}
+                    </p>
+                    <p className="mt-1 text-2xl font-semibold text-white">
+                      {project?.name_th || property.projects?.name_th}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl bg-white/90 px-4 py-3 text-right shadow-md">
+                    <p className="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">ราคา</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      {formatter.format(property.price)}
+                      {property.type === 'rent' && <span className="ml-1 text-xs font-medium text-slate-500">/เดือน</span>}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {property.images && property.images.length > 1 && (
+                <div className="border-t border-slate-200/70 bg-white/90 px-5 py-4">
+                  <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
+                    {property.images.map((img, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImage(img)}
+                        className={`relative h-20 overflow-hidden rounded-2xl border-2 transition ${
+                          selectedImage === img ? 'border-blue-500 shadow-lg shadow-blue-100' : 'border-transparent hover:border-blue-200'
+                        }`}
+                      >
+                        <img src={img} alt={`Thumbnail ${index + 1}`} className="h-full w-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        
-        <div className="p-6 md:p-8">
-          <div className="md:flex md:justify-between md:items-start">
-            <div>
-              <span className="text-sm bg-blue-100 text-blue-800 font-semibold px-3 py-1 rounded-full uppercase">For {property.type}</span>
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mt-2">{property.title_th}</h1>
-              <p className="text-gray-600 text-lg mt-1">{project?.name_th} ({project?.name_en})</p>
-            </div>
-            <div className="mt-4 md:mt-0 md:text-right">
-              <p className="text-4xl font-bold text-blue-600">{formatter.format(property.price)}</p>
-              {property.type === 'rent' && <p className="text-gray-500">/เดือน</p>}
+
+            <div className="grid gap-4 rounded-3xl border border-slate-200/80 bg-white/90 p-6 text-center shadow-lg shadow-slate-200/60 sm:grid-cols-2 lg:grid-cols-4">
+              {typeof property.bedrooms !== 'undefined' && (
+                <div className="space-y-2">
+                  <BedIcon className="mx-auto h-8 w-8 text-blue-500" />
+                  <p className="text-sm font-semibold text-slate-900">{property.bedrooms > 0 ? `${property.bedrooms} ห้องนอน` : 'สตูดิโอ'}</p>
+                </div>
+              )}
+              {typeof property.bathrooms !== 'undefined' && (
+                <div className="space-y-2">
+                  <BathIcon className="mx-auto h-8 w-8 text-blue-500" />
+                  <p className="text-sm font-semibold text-slate-900">{property.bathrooms} ห้องน้ำ</p>
+                </div>
+              )}
+              {property.size_sqm && (
+                <div className="space-y-2">
+                  <AreaIcon className="mx-auto h-8 w-8 text-blue-500" />
+                  <p className="text-sm font-semibold text-slate-900">{property.size_sqm} ตร.ม.</p>
+                </div>
+              )}
+              {typeof property.floor !== 'undefined' && property.floor !== null && (
+                <div className="space-y-2">
+                  <span className="text-3xl font-bold text-blue-500">{property.floor}</span>
+                  <p className="text-sm font-semibold text-slate-900">ชั้น</p>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center my-8 border-y py-4">
-            {typeof property.bedrooms !== 'undefined' && (
-              <div><BedIcon className="h-8 w-8 mx-auto text-blue-500" /><p className="mt-2 text-gray-700">{property.bedrooms > 0 ? `${property.bedrooms} Bedrooms` : 'Studio'}</p></div>
-            )}
-            {typeof property.bathrooms !== 'undefined' && (
-              <div><BathIcon className="h-8 w-8 mx-auto text-blue-500" /><p className="mt-2 text-gray-700">{property.bathrooms} Bathrooms</p></div>
-            )}
-            {property.size_sqm && (
-              <div><AreaIcon className="h-8 w-8 mx-auto text-blue-500" /><p className="mt-2 text-gray-700">{property.size_sqm} m²</p></div>
-            )}
-             {property.floor && (
-              <div><p className="text-3xl font-bold text-blue-500">{property.floor}</p><p className="mt-1 text-gray-700">Floor</p></div>
-            )}
-          </div>
+          <div className="space-y-6">
+            <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-8 shadow-xl shadow-slate-200/60">
+              <span className="inline-flex items-center rounded-full border border-slate-200/80 bg-slate-50/80 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-600">
+                {property.type === 'rent' ? 'for rent' : 'for sale'}
+              </span>
+              <h1 className="mt-4 text-3xl font-bold text-slate-900 sm:text-4xl">{property.title_th}</h1>
+              <p className="mt-2 text-sm font-medium uppercase tracking-[0.35em] text-slate-500">
+                {project?.name_th}
+                {project?.name_en && ` • ${project.name_en}`}
+              </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Key Details</h2>
-              <ul className="space-y-2 text-gray-700">
-                <li><strong>Furnished:</strong> {property.furnished || 'N/A'}</li>
-                {property.bts_distance_m && <li><strong>Distance to BTS:</strong> {property.bts_distance_m}m</li>}
-                {property.mrt_distance_m && <li><strong>Distance to MRT:</strong> {property.mrt_distance_m}m</li>}
-                {property.badges && <li><strong>Tags:</strong> {property.badges.join(', ')}</li>}
-              </ul>
+              <div className="mt-6 space-y-4">
+                <div className="rounded-2xl border border-slate-200/70 bg-slate-50/80 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">เสนอราคา</p>
+                  <p className="mt-2 text-3xl font-bold text-slate-900">
+                    {formatter.format(property.price)}
+                    {property.type === 'rent' && <span className="ml-2 text-base font-medium text-slate-500">/ เดือน</span>}
+                  </p>
+                </div>
+                <a
+                  href="tel:021234567"
+                  className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-lg shadow-blue-600/40 transition hover:-translate-y-0.5"
+                >
+                  นัดชมโครงการ
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    className="h-4 w-4"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5 15.75 12 8.25 19.5" />
+                  </svg>
+                </a>
+                <p className="text-xs text-slate-500">
+                  * บริการคอนเซียร์จของเราให้คำปรึกษาโดยไม่มีค่าใช้จ่าย พร้อมจัดเตรียมเอกสารและสินเชื่อหากต้องการ
+                </p>
+              </div>
             </div>
-            {project && (
-               <div>
-                 <h2 className="text-2xl font-bold text-gray-800 mb-4">About Project</h2>
-                 <ul className="space-y-2 text-gray-700">
-                   <li><strong>Developer:</strong> {project.developer}</li>
-                   <li><strong>Year Built:</strong> {project.year_built}</li>
-                   <li><strong>Total Floors:</strong> {project.floors}</li>
-                   <li><strong>Total Units:</strong> {project.units}</li>
-                   {project.facilities && <li><strong>Facilities:</strong> {project.facilities.join(', ')}</li>}
-                 </ul>
-               </div>
-            )}
+
+            <div className="space-y-6 rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-lg shadow-slate-200/60">
+              <div>
+                <h2 className="text-xl font-semibold text-slate-900">รายละเอียดสำคัญ</h2>
+                <ul className="mt-4 space-y-3 text-sm text-slate-600">
+                  <li className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                    <span className="font-medium text-slate-500">เฟอร์นิเจอร์</span>
+                    <span className="font-semibold text-slate-800">{property.furnished || 'N/A'}</span>
+                  </li>
+                  {property.bts_distance_m && (
+                    <li className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                      <span className="font-medium text-slate-500">ระยะถึง BTS</span>
+                      <span className="font-semibold text-slate-800">{property.bts_distance_m} ม.</span>
+                    </li>
+                  )}
+                  {property.mrt_distance_m && (
+                    <li className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                      <span className="font-medium text-slate-500">ระยะถึง MRT</span>
+                      <span className="font-semibold text-slate-800">{property.mrt_distance_m} ม.</span>
+                    </li>
+                  )}
+                  {property.badges && property.badges.length > 0 && (
+                    <li className="space-y-2">
+                      <span className="font-medium uppercase tracking-[0.3em] text-slate-500">ไฮไลต์</span>
+                      <div className="flex flex-wrap gap-2">
+                        {property.badges.map((badge) => (
+                          <span key={badge} className="inline-flex items-center rounded-full border border-slate-200/80 bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    </li>
+                  )}
+                </ul>
+              </div>
+
+              {project && (
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-900">ข้อมูลโครงการ</h2>
+                  <ul className="mt-4 space-y-3 text-sm text-slate-600">
+                    <li className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                      <span className="font-medium text-slate-500">ผู้พัฒนา</span>
+                      <span className="font-semibold text-slate-800">{project.developer || 'ไม่ระบุ'}</span>
+                    </li>
+                    <li className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                      <span className="font-medium text-slate-500">สร้างเสร็จ</span>
+                      <span className="font-semibold text-slate-800">{project.year_built || 'ไม่ระบุ'}</span>
+                    </li>
+                    <li className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                      <span className="font-medium text-slate-500">จำนวนชั้น</span>
+                      <span className="font-semibold text-slate-800">{project.floors || 'ไม่ระบุ'}</span>
+                    </li>
+                    <li className="flex items-center justify-between rounded-2xl border border-slate-200/70 bg-slate-50/80 px-4 py-3">
+                      <span className="font-medium text-slate-500">จำนวนยูนิต</span>
+                      <span className="font-semibold text-slate-800">{project.units || 'ไม่ระบุ'}</span>
+                    </li>
+                    {project.facilities && project.facilities.length > 0 && (
+                      <li className="space-y-2">
+                        <span className="font-medium uppercase tracking-[0.3em] text-slate-500">สิ่งอำนวยความสะดวก</span>
+                        <div className="flex flex-wrap gap-2">
+                          {project.facilities.map((facility) => (
+                            <span key={facility} className="inline-flex items-center rounded-full border border-slate-200/80 bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
+                              {facility}
+                            </span>
+                          ))}
+                        </div>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
