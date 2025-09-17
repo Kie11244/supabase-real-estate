@@ -81,148 +81,170 @@ const AddPropertyPage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Add New Property</h1>
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Project */}
-          <div>
-            <label htmlFor="project" className="block text-sm font-medium text-gray-700">Project</label>
-            <select
-              id="project"
-              value={project_slug}
-              onChange={(e) => setProjectSlug(e.target.value)}
-              required
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-            >
-              <option value="" disabled>Select a project</option>
-              {projects.map((p) => (
-                <option key={p.slug} value={p.slug}>{p.name_th}</option>
-              ))}
-            </select>
-          </div>
+    <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-3xl space-y-8">
+        <div className="rounded-3xl border border-slate-200/80 bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-purple-600/10 px-8 py-10 text-center shadow-xl shadow-slate-200/60">
+          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-blue-600">new listing</p>
+          <h1 className="mt-3 text-4xl font-bold text-slate-900">เพิ่มอสังหาฯ ลงระบบ</h1>
+          <p className="mt-2 text-sm text-slate-600">กรอกข้อมูลสำคัญของทรัพย์เพื่อเผยแพร่บนเว็บไซต์และจัดการในแดชบอร์ด</p>
+        </div>
 
-          {/* Title (TH) */}
-          <div>
-            <label htmlFor="title_th" className="block text-sm font-medium text-gray-700">Title (Thai)</label>
-            <input
-              type="text"
-              id="title_th"
-              value={title_th}
-              onChange={(e) => setTitleTh(e.target.value)}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
+        <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-8 shadow-2xl shadow-slate-200/60">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <label htmlFor="project" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  โครงการ
+                </label>
+                <select
+                  id="project"
+                  value={project_slug}
+                  onChange={(e) => setProjectSlug(e.target.value)}
+                  required
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+                  <option value="" disabled>
+                    เลือกโครงการ
+                  </option>
+                  {projects.map((p) => (
+                    <option key={p.slug} value={p.slug}>
+                      {p.name_th}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Type */}
-            <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700">Listing Type</label>
-              <select
-                id="type"
-                value={type}
-                onChange={(e) => setType(e.target.value as 'rent' | 'buy')}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              <div className="sm:col-span-2">
+                <label htmlFor="title_th" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  ชื่อประกาศ (ภาษาไทย)
+                </label>
+                <input
+                  type="text"
+                  id="title_th"
+                  value={title_th}
+                  onChange={(e) => setTitleTh(e.target.value)}
+                  required
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="type" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  ประเภทประกาศ
+                </label>
+                <select
+                  id="type"
+                  value={type}
+                  onChange={(e) => setType(e.target.value as 'rent' | 'buy')}
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+                  <option value="rent">ปล่อยเช่า</option>
+                  <option value="buy">ประกาศขาย</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="price" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  ราคา (บาท)
+                </label>
+                <input
+                  type="number"
+                  id="price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
+                  required
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="bedrooms" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  ห้องนอน
+                </label>
+                <input
+                  type="number"
+                  id="bedrooms"
+                  value={bedrooms}
+                  onChange={(e) => setBedrooms(e.target.value === '' ? '' : Number(e.target.value))}
+                  required
+                  min="0"
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="bathrooms" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  ห้องน้ำ
+                </label>
+                <input
+                  type="number"
+                  id="bathrooms"
+                  value={bathrooms}
+                  onChange={(e) => setBathrooms(e.target.value === '' ? '' : Number(e.target.value))}
+                  required
+                  min="1"
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="size_sqm" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  พื้นที่ใช้สอย (ตร.ม.)
+                </label>
+                <input
+                  type="number"
+                  id="size_sqm"
+                  value={size_sqm}
+                  onChange={(e) => setSizeSqm(e.target.value === '' ? '' : Number(e.target.value))}
+                  required
+                  min="0"
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="floor" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  ชั้นที่ตั้ง
+                </label>
+                <input
+                  type="number"
+                  id="floor"
+                  value={floor}
+                  onChange={(e) => setFloor(e.target.value === '' ? '' : Number(e.target.value))}
+                  min="0"
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="status" className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  สถานะประกาศ
+                </label>
+                <select
+                  id="status"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as 'available' | 'unavailable')}
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+                  <option value="available">พร้อมเผยแพร่</option>
+                  <option value="unavailable">พักการขาย/เช่า</option>
+                </select>
+              </div>
+            </div>
+
+            {error && <p className="text-center text-sm font-semibold text-rose-600">{error}</p>}
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-white shadow-lg shadow-blue-600/40 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-slate-300"
               >
-                <option value="rent">For Rent</option>
-                <option value="buy">For Sale</option>
-              </select>
+                {loading ? 'กำลังบันทึก...' : 'บันทึกข้อมูลทรัพย์'}
+              </button>
             </div>
-            {/* Price */}
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price (THB)</label>
-              <input
-                type="number"
-                id="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
-                required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Bedrooms */}
-            <div>
-              <label htmlFor="bedrooms" className="block text-sm font-medium text-gray-700">Bedrooms</label>
-              <input
-                type="number"
-                id="bedrooms"
-                value={bedrooms}
-                onChange={(e) => setBedrooms(e.target.value === '' ? '' : Number(e.target.value))}
-                required
-                min="0"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-            </div>
-            {/* Bathrooms */}
-            <div>
-              <label htmlFor="bathrooms" className="block text-sm font-medium text-gray-700">Bathrooms</label>
-              <input
-                type="number"
-                id="bathrooms"
-                value={bathrooms}
-                onChange={(e) => setBathrooms(e.target.value === '' ? '' : Number(e.target.value))}
-                required
-                min="1"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-            </div>
-            {/* Size */}
-            <div>
-              <label htmlFor="size_sqm" className="block text-sm font-medium text-gray-700">Size (m²)</label>
-              <input
-                type="number"
-                id="size_sqm"
-                value={size_sqm}
-                onChange={(e) => setSizeSqm(e.target.value === '' ? '' : Number(e.target.value))}
-                required
-                min="0"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-            </div>
-            {/* Floor */}
-            <div>
-              <label htmlFor="floor" className="block text-sm font-medium text-gray-700">Floor</label>
-              <input
-                type="number"
-                id="floor"
-                value={floor}
-                onChange={(e) => setFloor(e.target.value === '' ? '' : Number(e.target.value))}
-                min="0"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-            </div>
-          </div>
-
-          {/* Status */}
-          <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
-            <select
-              id="status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value as 'available' | 'unavailable')}
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-            >
-              <option value="available">Available</option>
-              <option value="unavailable">Unavailable</option>
-            </select>
-          </div>
-
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
-          <div className="pt-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300"
-            >
-              {loading ? 'Submitting...' : 'Add Property'}
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
