@@ -4,6 +4,14 @@ import type { Property } from '../../types';
 import PropertyCard from '../ui/PropertyCard';
 import Spinner from '../ui/Spinner';
 
+type SortOption = 'created_at_desc' | 'price_asc' | 'price_desc';
+
+const SORT_MAPPINGS: Record<SortOption, { column: string; ascending: boolean }> = {
+  created_at_desc: { column: 'created_at', ascending: false },
+  price_asc: { column: 'price', ascending: true },
+  price_desc: { column: 'price', ascending: false },
+};
+
 const PropertiesPage: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +20,7 @@ const PropertiesPage: React.FC = () => {
   // Filter states
   const [typeFilter, setTypeFilter] = useState<'all' | 'rent' | 'buy'>('all');
   const [bedroomFilter, setBedroomFilter] = useState<'all' | '0' | '1' | '2' | '3+'>('all');
-  const [sortBy, setSortBy] = useState<'created_at_desc' | 'price_asc' | 'price_desc'>('created_at_desc');
+  const [sortBy, setSortBy] = useState<SortOption>('created_at_desc');
 
   const fetchProperties = useCallback(async () => {
     setLoading(true);
@@ -40,8 +48,8 @@ const PropertiesPage: React.FC = () => {
         }
       }
       
-      const [sortField, sortOrder] = sortBy.split('_');
-      query = query.order(sortField, { ascending: sortOrder === 'asc' });
+      const sortConfig = SORT_MAPPINGS[sortBy] ?? SORT_MAPPINGS.created_at_desc;
+      query = query.order(sortConfig.column, { ascending: sortConfig.ascending });
 
       const { data, error: supabaseError } = await query;
 
