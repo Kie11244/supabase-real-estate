@@ -3,7 +3,7 @@ import { supabase } from '../../services/supabase';
 import type { Property } from '../../types';
 import PropertyCard from '../ui/PropertyCard';
 import Spinner from '../ui/Spinner';
-import { Link } from 'react-router-dom';
+import HeroSlider from '../ui/HeroSlider';
 
 const HomePage: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -57,29 +57,9 @@ const HomePage: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gray-800 text-white py-20 sm:py-32">
-        <div className="absolute inset-0">
-          <img src="https://picsum.photos/seed/hero/1920/1080" alt="Hero background" className="w-full h-full object-cover opacity-40"/>
-        </div>
-        <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
-            Find Your Perfect Home
-          </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-lg sm:text-xl text-gray-300">
-            Discover the best properties for sale and rent in prime locations.
-          </p>
-          <div className="mt-8">
-            <Link 
-              to="/properties"
-              className="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition duration-300"
-            >
-              Explore Properties
-            </Link>
-          </div>
-        </div>
-      </div>
+      <HeroSlider />
 
       {/* Featured Properties Section */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
