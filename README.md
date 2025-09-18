@@ -18,3 +18,11 @@ View your app in AI Studio: https://ai.studio/apps/drive/196cEkoKIBfyJIYnENYDH_q
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Deploy to GitHub Pages
+
+1. Build the production bundle into `docs/` so GitHub Pages can serve it:
+   `npm run build:docs`
+2. Commit and push the generated `docs` folder alongside your source so the latest UI appears on GitHub.
+   You can override the base path by setting `VITE_PUBLIC_BASE` before running the command if your repository name differs from the package name.
+
